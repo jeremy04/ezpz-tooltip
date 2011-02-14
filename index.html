@@ -21,6 +21,7 @@
 			$("#example-target-1").ezpz_tooltip({beforeShow:ajax_load_content});
 			$("#example-target-2").ezpz_tooltip({beforeShow:ajax_load_content, stayOnContent:true,contentPosition: 'rightStatic', offset:-40});
 			$("#example-target-3").ezpz_tooltip({beforeShow:ajax_load_content, contentId:'non_convention_content'});
+			$("#example-target-4").ezpz_tooltip({beforeShow:ajax_load_content, stayOnContent:true,contentPosition: 'rightStatic', offset:-40, showDelay:500});
 		});
 	</script>
 	<style type="text/css">
@@ -52,9 +53,13 @@
 		<p id="example-target-3" class="tooltip-target">
 			<a href="http://example.com">Tooltip with explicit contentId</a>
 		</p>
+		<p id="example-target-4" class="tooltip-target">
+			<a href="http://example.com">Tooltip with delay</a>
+		</p>
 	</div>
 	<div class="tooltip-content" id="example-content-1">Tooltip content</div>
 	<div class="tooltip-content" id="example-content-2">Tooltip content</div>
 	<div class="tooltip-content" id="non_convention_content">Tooltip content</div>
+	<div class="tooltip-content" id="example-content-4">Tooltip content</div>
 </body>
 </html>

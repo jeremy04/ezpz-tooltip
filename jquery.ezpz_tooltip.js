@@ -6,6 +6,7 @@
     return this.each(function(){
       var content = $("#" + getContentId(this.id));
 			var targetMousedOver = $(this);
+			var showTimer = null;
 			
 			var fPositionContent = function(e) {
 				var contentInfo = getElementDimensionsAndPosition(content);
@@ -18,9 +19,21 @@
 
         settings.showContent(content);
 			}
+			var fShowContent = function(e) {
+				settings.beforeShow(content, $(this));
+				fPositionContent(e);
+				targetMousedOver.mousemove(fPositionContent);
+			}
+
 			var fHideContent = function() {
 					if (targetMousedOver.data("overTrigger") || targetMousedOver.data("overContent")) return;
-					targetMousedOver.data("showing", false);
+					if (showTimer) {
+						window.cancelTimeout(showTimer);
+						showTimer = null;
+					}
+					targetMousedOver
+						.data("showing", false)
+						.unbind('mousemove', fPositionContent);
 					settings.hideContent(content);
           settings.afterHide();
 			}
@@ -29,11 +42,17 @@
 				.mouseenter(function(e){
 					targetMousedOver.data("overTrigger", true)
 					if (targetMousedOver.data("showing")) return; //prevent re-showing a shown popup
-					settings.beforeShow(content, $(this));
-					targetMousedOver.data("showing", true);
-					fPositionContent(e);
+					if (settings.showDelay) {
+						showTimer = window.setTimeout(function() {
+							targetMousedOver.data("showing", true);
+							fShowContent(e);
+							showTimer = null;
+						}, settings.showDelay);
+					} else {
+						targetMousedOver.data("showing", true);
+						fShowContent(e);
+					}
 				})
-				.mousemove(fPositionContent)
 				.mouseleave(function() {
 					targetMousedOver.data("overTrigger", false)
 					window.setTimeout(fHideContent, 0);
