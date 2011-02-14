@@ -28,7 +28,7 @@
 			var fHideContent = function() {
 					if (targetMousedOver.data("overTrigger") || targetMousedOver.data("overContent")) return;
 					if (showTimer) {
-						window.cancelTimeout(showTimer);
+						window.clearTimeout(showTimer);
 						showTimer = null;
 					}
 					targetMousedOver
