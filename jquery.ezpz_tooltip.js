@@ -7,6 +7,11 @@
       var content = $("#" + getContentId(this.id));
 			var targetMousedOver = $(this);
 			var showTimer = null;
+			var state = {
+				overTrigger: false,
+				overContent: false,
+				contentShown: false
+			};
 			
 			var fPositionContent = function(e) {
 				var contentInfo = getElementDimensionsAndPosition(content);
@@ -26,45 +31,44 @@
 			}
 
 			var fHideContent = function() {
-					if (targetMousedOver.data("overTrigger") || targetMousedOver.data("overContent")) return;
+					if (state.overTrigger || state.overContent) return;
 					if (showTimer) {
 						window.clearTimeout(showTimer);
 						showTimer = null;
 					}
-					targetMousedOver
-						.data("showing", false)
-						.unbind('mousemove', fPositionContent);
+					state.contentShown = false;
+					targetMousedOver.unbind('mousemove', fPositionContent);
 					settings.hideContent(content);
           settings.afterHide();
 			}
 			
 			targetMousedOver
 				.mouseenter(function(e){
-					targetMousedOver.data("overTrigger", true)
-					if (targetMousedOver.data("showing")) return; //prevent re-showing a shown popup
+					state.overTrigger = true;
+					if (state.contentShown) return; //prevent re-showing a shown popup
 					if (settings.showDelay) {
 						showTimer = window.setTimeout(function() {
-							targetMousedOver.data("showing", true);
+							state.contentShown = true;
 							fShowContent(e);
 							showTimer = null;
 						}, settings.showDelay);
 					} else {
-						targetMousedOver.data("showing", true);
+						state.contentShown = true;
 						fShowContent(e);
 					}
 				})
 				.mouseleave(function() {
-					targetMousedOver.data("overTrigger", false)
+					state.overTrigger = false;
 					window.setTimeout(fHideContent, 0);
 				});
 			
 			if (settings.stayOnContent) {
 				content
 					.mouseenter(function() {
-						targetMousedOver.data("overContent", true)
+						state.overContent = true;
 					})
 					.mouseleave(function() {
-						targetMousedOver.data("overContent", false)
+						state.overContent = false;
 						window.setTimeout(fHideContent, 0);
 					});
 			};
