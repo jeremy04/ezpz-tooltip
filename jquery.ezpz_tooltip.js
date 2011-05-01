@@ -18,10 +18,12 @@
         var contentInfo = $.fn.ezpz_tooltip.positions[settings.contentPosition](contentInfo, e.pageX, e.pageY, settings.offset, targetInfo);
         var contentInfo = keepInWindow(contentInfo);
 
-        content.css('top', contentInfo['top']);
+        content.css('top', contentInfo['top']+200);
         content.css('left', contentInfo['left']);
 
         settings.showContent(content);
+        
+        
 			}
 			var fHideContent = function() {
 					if (state.overTrigger || state.overContent) return;
@@ -70,14 +72,25 @@
     function getElementDimensionsAndPosition(element){
       var height = element.outerHeight(true);
       var width = element.outerWidth(true);
-      var top = $(element).offset().top;
-      var left = $(element).offset().left;
+	
+     var top = $(element).offset().top;
+     var left = $(element).offset().left;
+/*     if (element.length<1) { 
+        var top=0;
+       var left=0; 
+      }
+      else
+      {
+           var top = $(element).offset().top;
+           var left = $(element).offset().left;
+      }
+      */
+
       var info = new Array();
 
       // Set dimensions
       info['height'] = height;
       info['width'] = width;
-
       // Set position
       info['top'] = top;
       info['left'] = left;
@@ -129,10 +142,12 @@
     contentId: "",
     beforeShow: function(content){},
     showContent: function(content){
-      content.show();
+     // content.show();
+     content.css("visibility","visible");
     },
     hideContent: function(content){
-      content.hide();
+      //content.hide();
+      content.css("visibility","hidden");
     },
     afterHide: function(){}
   };
@@ -206,3 +221,4 @@
 	};
 
 })(jQuery);
+
